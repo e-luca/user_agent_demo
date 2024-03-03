@@ -1,10 +1,7 @@
 package com.project.useragent.dao;
 
 import com.project.useragent.model.UserAgent;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +9,8 @@ import java.time.LocalDateTime;
 @Table(name = "user_agent")
 public class UserAgentEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_agent_generator")
+    @SequenceGenerator(name = "user_agent_generator", sequenceName = "user_agent_seq", allocationSize = 1)
     private Long id;
     private String browser;
     private LocalDateTime created;
@@ -24,6 +22,7 @@ public class UserAgentEntity {
 
     public UserAgentEntity(String browser) {
         this.browser = browser;
+        this.created = LocalDateTime.now();
     }
 
     public UserAgent convert() {

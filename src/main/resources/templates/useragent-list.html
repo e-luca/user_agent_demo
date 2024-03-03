@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <title>User Agent</title>
+</head>
+<body>
+    <div class="card" style="padding-top: 50px;">
+        <div class="card-body">
+
+            <div th:switch="${useragents}" class="container my-5">
+                <p class="my-5">
+                    <button class="btn btn-primary" onclick="createUserAgent()">
+                        Create
+                    </button>
+                </p>
+
+
+                <div class="col-md-10">
+                    <h5 th:if="${#lists.size(useragents) == 0}">No record found!</h5>
+                    <h2 th:if="${#lists.size(useragents) > 0}" th:text="'Count: ' + ${#lists.size(useragents)}"></h2>
+                    <div th:case="*">
+                        <table class="table table-striped table-responsive-md">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Browser</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="useragent : ${useragents}">
+                                <td th:text="${useragent.id}"></td>
+                                <td th:text="${useragent.browser}"></td>
+                                <td>
+                                    <button th:onclick="'deleteAgent(' + ${useragent.id} + ');'" class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createUserAgent() {
+            var userAgent = navigator.userAgent;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("POST", "/api/agent/create", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        window.alert("Agent created successfully")
+                        window.location.href = "/api/agent";
+                    } else {
+                        window.alert("Unexpected Error occurred!");
+                    }
+                }
+            };
+
+            xhr.send("browser=" + encodeURIComponent(userAgent));
+        }
+
+        function deleteAgent(id) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("DELETE", "/api/agent/" + id, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        window.alert("Agent deleted successfully")
+                        window.location.href = "/api/agent";
+                    } else {
+                        window.alert("Unexpected Error occurred!");
+                    }
+                }
+            };
+
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
