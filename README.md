@@ -1,0 +1,6 @@
+- After appliction is started, navigate to http://localhost:8080/api/agent in your browser
+- UI part is done using help of thymeleaf
+- Database migrations are done using flyway
+- Database used in this example is H2
+- To access Database and entries go to http://localhost:8080/h2 while application is started
+- To log in use following data: Driver Class: org.h2.Driver,  JDBC URL: jdbc:h2:mem:agentdb,  User Name: username,  Password: password
